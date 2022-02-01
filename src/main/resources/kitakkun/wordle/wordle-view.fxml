@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import kitakkun.wordle.view.WordInputView?>
+<?import kitakkun.wordle.view.KeyBoardView?>
+<?import kitakkun.wordle.view.WordView?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16"
+            fx:controller="kitakkun.wordle.WordleController">
+    <top>
+        <MenuBar>
+            <Menu text="Show Hints">
+                <MenuItem text="Show Hints"/>
+            </Menu>
+            <Menu text="View">
+                <MenuItem text="Show Keyboard"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <WordInputView fx:id="wiView"/>
+    </center>
+    <right>
+        <VBox alignment="CENTER">
+            <WordView fx:id="wordView"/>
+            <KeyBoardView fx:id="kbView"/>
+        </VBox>
+    </right>
+    <bottom>
+        <VBox alignment="CENTER">
+            <Label text="this is a message box" fx:id="messageBox" wrapText="false"/>
+            <Button text="retry" focusTraversable="false" onAction="#retryWordle"/>
+        </VBox>
+    </bottom>
+
+</BorderPane>
