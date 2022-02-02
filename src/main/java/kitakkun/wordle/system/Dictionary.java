@@ -8,6 +8,8 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * 単語を管理するクラス
@@ -20,23 +22,23 @@ public class Dictionary {
      * コンストラクタ
      */
     public Dictionary() {
-        ArrayList<String> words = new ArrayList<>();
-        InputStream is = getClass().getResourceAsStream("/words/words_alpha.txt");
-        assert is != null;
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        for (String line : br.lines().toList()) {
-            words.addAll(Arrays.stream(line.split(", ")).toList());
-        }
+        ArrayList<String> words = loadWords(Objects.requireNonNull(getClass().getResource("/words/words_alpha.txt")));
         this.words = words.toArray(new String[0]);
         System.out.printf("%d words was loaded.\n", this.words.length);
-        try {
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    }
+
+    public Dictionary(String[] words) {
+        this.words = words;
+        System.out.printf("%d words was loaded.\n", this.words.length);
     }
 
     public Dictionary(URL url) {
+        ArrayList<String> words = loadWords(url);
+        this.words = words.toArray(new String[0]);
+        System.out.printf("%d words was loaded.\n", this.words.length);
+    }
+
+    private ArrayList<String> loadWords(URL url) {
         ArrayList<String> words = new ArrayList<>();
         try {
             File file = Paths.get(url.toURI()).toFile();
@@ -49,24 +51,7 @@ public class Dictionary {
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
-        this.words = words.toArray(new String[0]);
-        System.out.printf("%d words was loaded.\n", this.words.length);
-    }
-
-    public Dictionary(File file) {
-        ArrayList<String> words = new ArrayList<>();
-        try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            for (String line : br.lines().toList()) {
-                words.addAll(Arrays.stream(line.split(", ")).toList());
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.words = words.toArray(new String[0]);
-        System.out.printf("%d words was loaded.\n", this.words.length);
+        return words;
     }
 
     /**
@@ -102,5 +87,19 @@ public class Dictionary {
         String[] words = Arrays.stream(this.words).toList().stream().filter(word -> word.length() == length).toList().toArray(new String[0]);
         int index = (int)(Math.random() * words.length);
         return words[index];
+    }
+
+    public String[] search(String regex) {
+        ArrayList<String> searched = new ArrayList<>();
+        try {
+            for (String word : words) {
+                if (word.toLowerCase().matches(regex)) {
+                    searched.add(word);
+                }
+            }
+        } catch (PatternSyntaxException e) {
+            e.printStackTrace();
+        }
+        return searched.toArray(new String[0]);
     }
 }

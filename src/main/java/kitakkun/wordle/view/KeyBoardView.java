@@ -60,13 +60,19 @@ public class KeyBoardView extends VBox {
     }
 
     public void onKeyPressed(KeyEvent event) {
-        char c = event.getText().toUpperCase().charAt(0);
-        setKeyColor(c, colorOnPressed);
+        String text = event.getText();
+        if (!text.equals("")) {
+            char c = text.toUpperCase().charAt(0);
+            setKeyColor(c, colorOnPressed);
+        }
     }
 
     public void onKeyReleased(KeyEvent event) {
-        char c = event.getText().toUpperCase().charAt(0);
-        setKeyColor(c, colorOnReleased);
+        String text = event.getText();
+        if (!text.equals("")) {
+            char c = text.toUpperCase().charAt(0);
+            setKeyColor(c, colorOnReleased);
+        }
     }
 
     public void releaseAllKeys() {

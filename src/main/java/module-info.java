@@ -1,6 +1,7 @@
 module kitakkun.wordle {
     requires javafx.controls;
     requires javafx.fxml;
+    requires org.jsoup;
 
 
     opens kitakkun.wordle to javafx.fxml;

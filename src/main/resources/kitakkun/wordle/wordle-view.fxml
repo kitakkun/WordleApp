@@ -6,23 +6,40 @@
 <?import kitakkun.wordle.view.WordInputView?>
 <?import kitakkun.wordle.view.KeyBoardView?>
 <?import kitakkun.wordle.view.WordView?>
+<?import kitakkun.wordle.view.DictionarySearchView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16"
             fx:controller="kitakkun.wordle.WordleController">
     <top>
         <MenuBar>
-            <Menu text="Show Hints">
-                <MenuItem text="Show Hints"/>
+            <Menu text="Settings">
+                <MenuItem text="Settings" onAction="#openSettings">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" shortcut="DOWN" control="UP" code="COMMA" shift="UP" meta="UP"/>
+                    </accelerator>
+                </MenuItem>
             </Menu>
             <Menu text="View">
-                <MenuItem text="Show Keyboard"/>
+                <CheckMenuItem text="Show Keyboard" fx:id="showKB" selected="true" onAction="#showView"/>
+                <CheckMenuItem text="Show Dictionary" fx:id="showDict" selected="true" onAction="#showView"/>
             </Menu>
         </MenuBar>
     </top>
     <center>
-        <WordInputView fx:id="wiView"/>
+        <VBox>
+            <padding>
+                <Insets topRightBottomLeft="20"/>
+            </padding>
+            <WordInputView fx:id="wiView"/>
+        </VBox>
     </center>
     <right>
         <VBox alignment="CENTER">
+            <padding>
+                <Insets topRightBottomLeft="20"/>
+            </padding>
+            <DictionarySearchView fx:id="dsView"/>
             <WordView fx:id="wordView"/>
             <KeyBoardView fx:id="kbView"/>
         </VBox>
@@ -31,6 +48,7 @@
         <VBox alignment="CENTER">
             <Label text="this is a message box" fx:id="messageBox" wrapText="false"/>
             <Button text="retry" focusTraversable="false" onAction="#retryWordle"/>
+            <Button text="searchWords" focusTraversable="false" onAction="#searchWords"/>
         </VBox>
     </bottom>
 

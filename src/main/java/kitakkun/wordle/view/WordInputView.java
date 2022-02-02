@@ -27,11 +27,11 @@ public class WordInputView extends GridPane {
 
     public WordInputView() {
         initialize();
-        this.setAlignment(Pos.CENTER);
-        this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/style.css")).toExternalForm());
     }
 
     public void initialize() {
+        this.setOnMouseClicked(mouseEvent -> requestFocus());
+        this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/style.css")).toExternalForm());
         this.setAlignment(Pos.CENTER);
         initTable(wordLength, attemptLimit);
         dictionary = new Dictionary();
@@ -114,26 +114,25 @@ public class WordInputView extends GridPane {
      * 単語を確定します．
      */
     public WordleState enter() {
+        String word = getCurrentWord();
         WordleState state;
-        if (isCursorXOnEnd()) {
-            String word = getCurrentWord();
-            if (dictionary.isExist(word)) {
-                Judge[] judges = wordle.compare(word);
-                updateWordCells(judges);
-                moveCursorY("forward");
-                resetCursorX();
-                isFinished = wordle.isCorrect(word);
-                if (wordle.isCorrect(word) || isFinished()) {
-                    state = WordleState.FINISHED;
-                } else {
-                    state = WordleState.CHECKED;
-                }
-            } else {
-                System.out.printf("The word, \"%s\" doesn't exist on our dictionary\n", word);
-                state = WordleState.NOT_ON_DICTIONARY;
-            }
-        } else {
+        // 単語が最後まで入力されていない場合
+        if (!isCursorXOnEnd()) {
             state = WordleState.NOT_ENOUGH_LETTERS;
+        } else if (!dictionary.isExist(word)) {
+            System.out.printf("The word, \"%s\" doesn't exist on our dictionary\n", word);
+            state = WordleState.NOT_ON_DICTIONARY;
+        } else {
+            Judge[] judges = wordle.compare(word);
+            updateWordCells(judges);
+            moveCursorY("forward");
+            resetCursorX();
+            isFinished = wordle.isCorrect(word);
+            if (wordle.isCorrect(word) || isFinished()) {
+                state = WordleState.FINISHED;
+            } else {
+                state = WordleState.CHECKED;
+            }
         }
         return state;
     }
@@ -233,5 +232,17 @@ public class WordInputView extends GridPane {
 
     public String getAnswer() {
         return wordle.getWord();
+    }
+
+    public String[] getAllInputs() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < cursorY; i++) {
+            for (int j = 0; j < wordLength; j++) {
+                Label label = (Label) cells[i][j].getChildren().get(0);
+                sb.append(label.getText());
+            }
+            sb.append(",");
+        }
+        return sb.toString().split(",");
     }
 }
