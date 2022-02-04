@@ -17,7 +17,12 @@ public class WordView extends HBox {
 
     public void initialize() {
         this.setAlignment(Pos.CENTER);
-        wordLength = 5;
+        ready(5);
+    }
+
+    public void ready(int wordLength) {
+        this.wordLength = wordLength;
+        this.getChildren().clear();
         panes = new Pane[wordLength];
         for (int i = 0; i < wordLength; i++) {
             StackPane pane = new StackPane();

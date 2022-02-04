@@ -8,6 +8,10 @@
     -fx-font-size: 25;
 }
 
+.cell-char {
+    -fx-font-size: 25;
+}
+
 .exist-bg {
     -fx-background-color: #c9b458;
 }

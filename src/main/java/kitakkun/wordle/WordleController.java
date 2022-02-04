@@ -54,7 +54,7 @@ public class WordleController {
         if (message != null) {
             messageBox.setText(message);
         }
-        if (state == WordleState.CHECKED) {
+        if (state == WordleState.CHECKED || state == WordleState.FINISHED) {
             String[] words = wiView.getAllInputs();
             String word = words[words.length - 1];
             Judge[] judges = wordle.compare(word);
@@ -97,6 +97,7 @@ public class WordleController {
         wordle = new Wordle(settings.getAnswerDictionary().getRandomWord(settings.getWordLength()));
         dsView.setDictionary(settings.getDictionary());
         wiView.ready(wordle, settings.getAttemptLimit());
+        wordView.ready(settings.getWordLength());
         messageBox.setText(String.format("Imagine %d letters word.", settings.getWordLength()));
         kbView.releaseAllKeys();
         try {
