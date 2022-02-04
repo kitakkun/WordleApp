@@ -40,9 +40,7 @@ public class WordleController {
 
     public void initialize() {
         settings = new Settings();
-        wordle = new Wordle(settings.getAnswerDictionary().getRandomWord(settings.getWordLength()));
-        wiView.ready(wordle, settings.getAttemptLimit());
-        kbView.setKeyColor('Q', Color.WHITE);
+        readyWordle();
     }
 
     public void onKeyPressed(KeyEvent event) {
@@ -89,10 +87,10 @@ public class WordleController {
         wiView.ready(wordle, settings.getAttemptLimit());
         messageBox.setText(String.format("Imagine %d letters word.", settings.getWordLength()));
         kbView.releaseAllKeys();
-        Stage window = (Stage) wiView.getScene().getWindow();
-        if (window != null) {
+        try {
+            Stage window = (Stage) wiView.getScene().getWindow();
             window.sizeToScene();
-        }
+        } catch (NullPointerException ignore) { }
     }
 
     @FXML
