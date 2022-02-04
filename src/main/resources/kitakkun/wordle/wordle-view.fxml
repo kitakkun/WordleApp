@@ -33,7 +33,7 @@
                 <Insets topRightBottomLeft="20"/>
             </padding>
             <WordInputView fx:id="wiView"/>
-            <Label text="this is a message box" fx:id="messageBox" wrapText="true"/>
+            <Label text="this is a message box" prefHeight="50" textAlignment="CENTER" fx:id="messageBox" wrapText="true"/>
         </VBox>
     </center>
     <right>

@@ -1,8 +1,6 @@
 package kitakkun.wordle.view;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -94,12 +92,29 @@ public class WordInputView extends GridPane {
         if (!isCursorXOnEnd()) {
             Label charLabel = (Label) cells[cursorY][cursorX].getChildren().get(0);
             charLabel.setText(String.valueOf(c).toUpperCase());
+            expandAnim(cursorY, cursorX);
             moveCursorX("forward");
             state = WordleState.INPUT;
         } else {
             state = WordleState.NO_INPUT;
         }
         return state;
+    }
+
+    public void expandAnim(int y, int x) {
+        Pane pane = cells[y][x];
+        ScaleTransition toBig = new ScaleTransition(new Duration(100), pane);
+        ScaleTransition toSmall = new ScaleTransition(new Duration(100), pane);
+        toBig.setFromX(1);
+        toBig.setFromY(1);
+        toBig.setToX(1.1);
+        toBig.setToY(1.1);
+        toSmall.setToX(1);
+        toSmall.setToY(1);
+        toSmall.setFromX(1.1);
+        toSmall.setFromY(1.1);
+        toBig.play();
+        toSmall.play();
     }
 
     /**
@@ -126,6 +141,7 @@ public class WordInputView extends GridPane {
             state = WordleState.NOT_ENOUGH_LETTERS;
         } else if (!dictionary.isExist(word)) {
             System.out.printf("The word, \"%s\" doesn't exist on our dictionary\n", word);
+            notOnDictionaryAnim(cursorY);
             state = WordleState.NOT_ON_DICTIONARY;
         } else {
             Judge[] judges = wordle.compare(word);
@@ -140,6 +156,25 @@ public class WordInputView extends GridPane {
             }
         }
         return state;
+    }
+
+    public void notOnDictionaryAnim(int y) {
+        for (Pane cell : cells[y]) {
+            TranslateTransition toRight = new TranslateTransition(new Duration(50), cell);
+            TranslateTransition toLeft = new TranslateTransition(new Duration(50), cell);
+            TranslateTransition toCenter = new TranslateTransition(new Duration(50), cell);
+            toCenter.setFromX(-2);
+            toCenter.setToX(0);
+            toLeft.setFromX(0);
+            toLeft.setToX(-2);
+            toRight.setFromX(0);
+            toRight.setToX(2);
+            toRight.play();
+            toLeft.play();
+            toRight.play();
+            toLeft.play();
+            toCenter.play();
+        }
     }
 
     /**
