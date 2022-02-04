@@ -1,10 +1,16 @@
 package kitakkun.wordle.view;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.util.Duration;
 import kitakkun.wordle.system.Dictionary;
 import kitakkun.wordle.system.Judge;
 import kitakkun.wordle.system.Wordle;
@@ -142,17 +148,35 @@ public class WordInputView extends GridPane {
      * @param judges 判定情報
      */
     private void updateWordCells(Judge[] judges) {
+        animateCells(judges);
+    }
+
+    private void animateCells(Judge[] judges) {
+        Timeline timeline = new Timeline();
+        double duration = 0;
+        double span = 200;
         for (int i = 0; i < judges.length; i++) {
-            String styles = "";
-            switch (judges[i]) {
-                case EXACT -> styles = "exact-char";
-                case EXIST -> styles = "exist-char";
-                case NOT_EXIST -> styles = "not-exist-char";
-            }
             Pane cell = cells[cursorY][i];
-            cell.getStyleClass().clear();
-            cell.getStyleClass().add(styles);
+            Judge judge = judges[i];
+            cell.setRotationAxis(new Point3D(1, 0, 0));
+            timeline.getKeyFrames().addAll(
+                    new KeyFrame(new Duration(duration * span), new KeyValue(cell.rotateProperty(), 0)),
+                    new KeyFrame(new Duration((duration + 1) * span), new KeyValue(cell.rotateProperty(), 90)),
+                    new KeyFrame(new Duration((duration + 1) * span), e -> cell.getStyleClass().add(getStyleClassByJudge(judge))),
+                    new KeyFrame(new Duration((duration + 2) * span), new KeyValue(cell.rotateProperty(), 0))
+            );
+            duration += 2;
         }
+        timeline.play();
+    }
+
+    private String getStyleClassByJudge(Judge judge) {
+        return switch (judge) {
+            case EXACT -> "exact-char";
+            case EXIST -> "exist-char";
+            case NOT_EXIST -> "not-exist-char";
+            default -> "";
+        };
     }
 
     /**

@@ -46,25 +46,28 @@ public class WordleController {
     public void onKeyPressed(KeyEvent event) {
         WordleState state = wiView.onKeyPressed(event);
         kbView.onKeyPressed(event);
-
-        String message = "No message";
-        switch (state) {
-            case NOT_ON_DICTIONARY -> message = String.format("The word '%s' doesn't exist on our dictionary.", wiView.getCurrentWord());
-            case FINISHED -> message = String.format("The answer is '%s'.", wiView.getAnswer());
-            case CHECKED -> {
-                String[] words = wiView.getAllInputs();
-                String word = words[words.length - 1];
-                Judge[] judges = wordle.compare(word);
-                for (int i = 0; i < judges.length; i++) {
-                    if (judges[i] == Judge.EXACT) {
-                        wordView.setChar(i, word.charAt(i));
-                    }
+        String message = generateMessage(state);
+        if (message != null) {
+            messageBox.setText(message);
+        }
+        if (state == WordleState.CHECKED) {
+            String[] words = wiView.getAllInputs();
+            String word = words[words.length - 1];
+            Judge[] judges = wordle.compare(word);
+            for (int i = 0; i < judges.length; i++) {
+                if (judges[i] == Judge.EXACT) {
+                    wordView.setChar(i, word.charAt(i));
                 }
             }
         }
-        if (state == WordleState.NOT_ON_DICTIONARY || state == WordleState.FINISHED ) {
-            messageBox.setText(message);
-        }
+    }
+
+    private String generateMessage(WordleState state) {
+        return switch (state) {
+            case NOT_ON_DICTIONARY -> String.format("The word '%s' doesn't exist on our dictionary.", wiView.getCurrentWord());
+            case FINISHED -> String.format("The answer is '%s'.", wiView.getAnswer());
+            default -> null;
+        };
     }
 
     public void onKeyReleased(KeyEvent event) {
