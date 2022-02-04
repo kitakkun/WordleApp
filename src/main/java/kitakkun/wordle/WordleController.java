@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -22,7 +23,9 @@ import java.util.Objects;
 public class WordleController {
 
     @FXML
-    public Label messageBox;
+    private BorderPane parent;
+    @FXML
+    private Label messageBox;
     @FXML
     private WordInputView wiView;
     @FXML
@@ -39,6 +42,7 @@ public class WordleController {
     private Wordle wordle;
 
     public void initialize() {
+        parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/base.css")).toExternalForm());
         settings = new Settings();
         readyWordle();
     }
@@ -85,6 +89,11 @@ public class WordleController {
 
     @FXML
     protected void readyWordle() {
+        if (settings.isDarkTheme()) {
+            parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/dark.css")).toExternalForm());
+        } else {
+            parent.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("/css/dark.css")).toExternalForm());
+        }
         wordle = new Wordle(settings.getAnswerDictionary().getRandomWord(settings.getWordLength()));
         dsView.setDictionary(settings.getDictionary());
         wiView.ready(wordle, settings.getAttemptLimit());

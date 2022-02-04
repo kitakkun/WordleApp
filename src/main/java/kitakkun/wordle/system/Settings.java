@@ -6,6 +6,7 @@ public class Settings {
     private Dictionary dictionary; // 辞書
     private Dictionary answerDictionary; // 答え用辞書
     private boolean permitShorterWords; // 短い単語入力を許可するか
+    private boolean isDarkTheme;    // ダークテーマを用いるかどうか
 
     public Settings() {
         wordLength = 5;
@@ -13,6 +14,7 @@ public class Settings {
         dictionary = new Dictionary();
         answerDictionary = new Dictionary();
         permitShorterWords = false;
+        isDarkTheme = false;
     }
 
     public int getWordLength() {
@@ -54,4 +56,13 @@ public class Settings {
     public void setPermitShorterWords(boolean permitShorterWords) {
         this.permitShorterWords = permitShorterWords;
     }
+
+    public boolean isDarkTheme() {
+        return isDarkTheme;
+    }
+
+    public void setDarkTheme(boolean darkTheme) {
+        isDarkTheme = darkTheme;
+    }
+
 }

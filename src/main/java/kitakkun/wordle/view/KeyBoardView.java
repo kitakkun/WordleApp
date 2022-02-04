@@ -39,7 +39,7 @@ public class KeyBoardView extends VBox {
                 this.getChildren().add(hBox);
             }
             StackPane pane = new StackPane();
-            pane.setStyle("-fx-background-color: white;");
+            pane.getStyleClass().add("kb-color");
             pane.setMinSize(30,30);
             Label label = new Label(String.valueOf(c));
             pane.getChildren().add(label);
@@ -59,6 +59,12 @@ public class KeyBoardView extends VBox {
         }
     }
 
+    public void releaseKey(char c) {
+        if (keyPanes.containsKey(c)) {
+            keyPanes.get(c).setStyle("");
+        }
+    }
+
     public void onKeyPressed(KeyEvent event) {
         String text = event.getText();
         if (!text.equals("")) {
@@ -71,13 +77,13 @@ public class KeyBoardView extends VBox {
         String text = event.getText();
         if (!text.equals("")) {
             char c = text.toUpperCase().charAt(0);
-            setKeyColor(c, colorOnReleased);
+            releaseKey(c);
         }
     }
 
     public void releaseAllKeys() {
         for (char c : keyPanes.keySet()) {
-            setKeyColor(c, colorOnReleased);
+            releaseKey(c);
         }
     }
 }

@@ -1,0 +1,15 @@
+.root {
+    -fx-base: #222;
+}
+
+.label {
+    -fx-text-fill: lightgray;
+}
+
+.text-field {
+    -fx-prompt-text-fill: gray;
+}
+
+.kb-color {
+    -fx-background-color: #222;
+}

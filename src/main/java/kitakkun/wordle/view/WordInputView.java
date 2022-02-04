@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import kitakkun.wordle.system.Dictionary;
 import kitakkun.wordle.system.Judge;
@@ -37,7 +38,6 @@ public class WordInputView extends GridPane {
 
     public void initialize() {
         this.setOnMouseClicked(mouseEvent -> requestFocus());
-        this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/style.css")).toExternalForm());
         this.setAlignment(Pos.CENTER);
         initTable(wordLength, attemptLimit);
         dictionary = new Dictionary();
@@ -55,8 +55,7 @@ public class WordInputView extends GridPane {
                 StackPane pane = new StackPane();
                 Label charLabel = new Label();
                 StackPane.setAlignment(charLabel, Pos.CENTER);
-                pane.getStyleClass().add("cell");
-                charLabel.getStyleClass().add("cell-char");
+                pane.getStyleClass().add("letter-cell");
                 pane.getChildren().add(charLabel);
                 add(pane, j, i);
                 cells[i][j] = pane;
@@ -157,12 +156,14 @@ public class WordInputView extends GridPane {
         double span = 200;
         for (int i = 0; i < judges.length; i++) {
             Pane cell = cells[cursorY][i];
+            Label label = (Label) cell.getChildren().get(0);
             Judge judge = judges[i];
             cell.setRotationAxis(new Point3D(1, 0, 0));
             timeline.getKeyFrames().addAll(
                     new KeyFrame(new Duration(duration * span), new KeyValue(cell.rotateProperty(), 0)),
                     new KeyFrame(new Duration((duration + 1) * span), new KeyValue(cell.rotateProperty(), 90)),
                     new KeyFrame(new Duration((duration + 1) * span), e -> cell.getStyleClass().add(getStyleClassByJudge(judge))),
+                    new KeyFrame(new Duration((duration + 1) * span), e -> label.setTextFill(Color.WHITE)),
                     new KeyFrame(new Duration((duration + 2) * span), new KeyValue(cell.rotateProperty(), 0))
             );
             duration += 2;
@@ -172,10 +173,9 @@ public class WordInputView extends GridPane {
 
     private String getStyleClassByJudge(Judge judge) {
         return switch (judge) {
-            case EXACT -> "exact-char";
-            case EXIST -> "exist-char";
-            case NOT_EXIST -> "not-exist-char";
-            default -> "";
+            case EXACT -> "exact-bg";
+            case EXIST -> "exist-bg";
+            case NOT_EXIST -> "not-exist-bg";
         };
     }
 

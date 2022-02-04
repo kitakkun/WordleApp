@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
+<?import kitakkun.wordle.view.DictionarySelector?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="kitakkun.wordle.SettingView"
@@ -15,6 +15,12 @@
     </padding>
     <HBox alignment="CENTER">
         <Label text="%settings"/>
+    </HBox>
+    <HBox>
+        <Label text="%theme"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <RadioButton text="%light" fx:id="lightRadioBtn"/>
+        <RadioButton text="%dark" fx:id="darkRadioBtn"/>
     </HBox>
     <HBox alignment="CENTER">
         <Label text="%attemptLimit" />
@@ -31,12 +37,12 @@
     <HBox alignment="CENTER">
         <Label text="%dictionary"/>
         <Pane HBox.hgrow="ALWAYS"/>
-        <ComboBox promptText="Select a dictionary to use"/>
+        <DictionarySelector promptText="Select a dictionary to use" fx:id="dictComboBox"/>
     </HBox>
     <HBox alignment="CENTER">
         <Label text="%answerDictionary"/>
         <Pane HBox.hgrow="ALWAYS"/>
-        <ComboBox promptText="Select a dictionary to use"/>
+        <DictionarySelector promptText="Select a dictionary to use" fx:id="ansDictComboBox"/>
     </HBox>
     <HBox alignment="CENTER_LEFT">
         <CheckBox text="%permitWordShortage" fx:id="permitShorterWord" />
