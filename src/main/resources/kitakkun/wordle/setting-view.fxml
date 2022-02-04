@@ -19,13 +19,13 @@
     <HBox alignment="CENTER">
         <Label text="%attemptLimit" />
         <Pane HBox.hgrow="ALWAYS"/>
-        <Spinner min="1" max="10"/>
+        <Spinner min="1" max="10" fx:id="attemptLimitSpinner"/>
         <Label text="%times" prefWidth="70" alignment="CENTER_RIGHT"/>
     </HBox>
     <HBox alignment="CENTER">
         <Label text="%wordLength"/>
         <Pane HBox.hgrow="ALWAYS"/>
-        <Spinner min="3" max="10" />
+        <Spinner min="3" max="10" fx:id="wordLengthSpinner"/>
         <Label text="%letters" prefWidth="70" alignment="CENTER_RIGHT" />
     </HBox>
     <HBox alignment="CENTER">
@@ -39,10 +39,10 @@
         <ComboBox promptText="Select a dictionary to use"/>
     </HBox>
     <HBox alignment="CENTER_LEFT">
-        <CheckBox text="%permitWordShortage" />
+        <CheckBox text="%permitWordShortage" fx:id="permitShorterWord" />
     </HBox>
     <HBox alignment="CENTER_RIGHT" spacing="10">
-        <Button text="%cancel"/>
-        <Button text="%ok"/>
+        <Button text="%cancel" onAction="#onCancelBtnClicked"/>
+        <Button text="%ok" onAction="#onOKBtnClicked"/>
     </HBox>
 </VBox>

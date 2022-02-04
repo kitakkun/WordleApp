@@ -7,7 +7,13 @@ public class Settings {
     private Dictionary answerDictionary; // 答え用辞書
     private boolean permitShorterWords; // 短い単語入力を許可するか
 
-    public Settings() { }
+    public Settings() {
+        wordLength = 5;
+        attemptLimit = 6;
+        dictionary = new Dictionary();
+        answerDictionary = new Dictionary();
+        permitShorterWords = false;
+    }
 
     public int getWordLength() {
         return wordLength;

@@ -2,7 +2,6 @@ package kitakkun.wordle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
@@ -10,23 +9,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import kitakkun.wordle.system.Dictionary;
-import kitakkun.wordle.system.Judge;
-import kitakkun.wordle.system.Wordle;
-import kitakkun.wordle.system.WordleState;
+import kitakkun.wordle.system.*;
 import kitakkun.wordle.view.*;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.Locale;
 import java.util.Objects;
 
 public class WordleController {
@@ -45,19 +35,13 @@ public class WordleController {
     @FXML
     private CheckMenuItem showDict, showKB;
 
+    private Settings settings;
     private Wordle wordle;
-    // 辞書
-    private Dictionary dictionary;
-    // 正解候補単語の辞書
-    private Dictionary answerDictionary;
 
     public void initialize() {
-        dictionary = new Dictionary(Objects.requireNonNull(getClass().getResource("/words/words_alpha.txt")));
-        answerDictionary = new Dictionary(Objects.requireNonNull(getClass().getResource("/words/words_alpha.txt")));
-        wordle = new Wordle(answerDictionary.getRandomWord(5));
-        wiView.ready(wordle, 10);
-        wiView.setDictionary(dictionary);
-        dsView.setDictionary(dictionary);
+        settings = new Settings();
+        wordle = new Wordle(settings.getAnswerDictionary().getRandomWord(settings.getWordLength()));
+        wiView.ready(wordle, settings.getAttemptLimit());
         kbView.setKeyColor('Q', Color.WHITE);
     }
 
@@ -99,21 +83,23 @@ public class WordleController {
     }
 
     @FXML
-    protected void retryWordle() {
-        wordle = new Wordle(answerDictionary.getRandomWord(5));
-        wiView.ready(wordle, 10);
-        messageBox.setText("Imagine 5 letters word.");
+    protected void readyWordle() {
+        wordle = new Wordle(settings.getAnswerDictionary().getRandomWord(settings.getWordLength()));
+        wiView.ready(wordle, settings.getAttemptLimit());
+        messageBox.setText(String.format("Imagine %d letters word.", settings.getWordLength()));
         kbView.releaseAllKeys();
+        Stage window = (Stage) wiView.getScene().getWindow();
+        if (window != null) {
+            window.sizeToScene();
+        }
     }
 
     @FXML
     protected void openSettings() {
-        SettingView view = new SettingView();
-        Stage stage = new Stage();
-        Scene scene = new Scene(view);
-        stage.setScene(scene);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
+        SettingWindow window = new SettingWindow(settings);
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setOnHiding(windowEvent -> readyWordle());
+        window.show();
     }
 
     @FXML
