@@ -85,6 +85,7 @@ public class WordleController {
     @FXML
     protected void readyWordle() {
         wordle = new Wordle(settings.getAnswerDictionary().getRandomWord(settings.getWordLength()));
+        dsView.setDictionary(settings.getDictionary());
         wiView.ready(wordle, settings.getAttemptLimit());
         messageBox.setText(String.format("Imagine %d letters word.", settings.getWordLength()));
         kbView.releaseAllKeys();
