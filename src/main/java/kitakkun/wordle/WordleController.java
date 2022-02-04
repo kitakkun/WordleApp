@@ -14,10 +14,7 @@ import kitakkun.wordle.system.Dictionary;
 import kitakkun.wordle.system.Judge;
 import kitakkun.wordle.system.Wordle;
 import kitakkun.wordle.system.WordleState;
-import kitakkun.wordle.view.DictionarySearchView;
-import kitakkun.wordle.view.KeyBoardView;
-import kitakkun.wordle.view.WordInputView;
-import kitakkun.wordle.view.WordView;
+import kitakkun.wordle.view.*;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -83,7 +80,9 @@ public class WordleController {
                 }
             }
         }
-        messageBox.setText(message);
+        if (state == WordleState.NOT_ON_DICTIONARY || state == WordleState.FINISHED ) {
+            messageBox.setText(message);
+        }
     }
 
     public void onKeyReleased(KeyEvent event) {
@@ -129,6 +128,10 @@ public class WordleController {
 
     @FXML
     protected void searchWords() {
+        Stage stage = new Stage();
+        SearchResultView srView = new SearchResultView();
+        Scene scene = new Scene(srView, 100, 100);
+        stage.setScene(scene);
         String[] words = wiView.getAllInputs();
         for (String word : words) {
             try {
@@ -138,6 +141,7 @@ public class WordleController {
                 Elements meanings = doc.getElementsByClass("content-explanation");
                 if (meanings.size() != 0) {
                     Element meaning = meanings.get(0);
+                    srView.addWord(word, meaning.text());
                     System.out.printf("%s: %s\n", word, meaning.text());
                 }
                 Thread.sleep(1000);
@@ -145,5 +149,8 @@ public class WordleController {
                 e.printStackTrace();
             }
         }
+        srView.constructView();
+        stage.sizeToScene();
+        stage.show();
     }
 }

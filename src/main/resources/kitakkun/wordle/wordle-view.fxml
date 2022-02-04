@@ -27,11 +27,12 @@
         </MenuBar>
     </top>
     <center>
-        <VBox>
+        <VBox alignment="CENTER">
             <padding>
                 <Insets topRightBottomLeft="20"/>
             </padding>
             <WordInputView fx:id="wiView"/>
+            <Label text="this is a message box" fx:id="messageBox" wrapText="true"/>
         </VBox>
     </center>
     <right>
@@ -45,11 +46,10 @@
         </VBox>
     </right>
     <bottom>
-        <VBox alignment="CENTER">
-            <Label text="this is a message box" fx:id="messageBox" wrapText="false"/>
+        <HBox alignment="CENTER" spacing="15">
             <Button text="retry" focusTraversable="false" onAction="#retryWordle"/>
             <Button text="searchWords" focusTraversable="false" onAction="#searchWords"/>
-        </VBox>
+        </HBox>
     </bottom>
 
 </BorderPane>
