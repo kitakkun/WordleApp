@@ -22,7 +22,19 @@ public class Dictionary {
      * コンストラクタ
      */
     public Dictionary() {
-        ArrayList<String> words = loadWords(Objects.requireNonNull(getClass().getResource("/words/words_alpha.txt")));
+        ArrayList<String> words = new ArrayList<>();
+
+        try {
+            InputStream is = getClass().getResourceAsStream("/words/words_alpha.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            for (String line : br.lines().toList()) {
+                words.addAll(Arrays.stream(line.split(",")).toList());
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        ArrayList<String> words = loadWords(Objects.requireNonNull(getClass().getResource("/words/words_alpha.txt")));
         this.words = words.toArray(new String[0]);
         System.out.printf("%d words was loaded.\n", this.words.length);
     }

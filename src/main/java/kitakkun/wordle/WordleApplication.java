@@ -7,11 +7,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class WordleApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(WordleApplication.class.getResource("wordle-view.fxml"));
+        ResourceBundle bundle = ResourceBundle.getBundle("bundles/UIResources");
+        FXMLLoader fxmlLoader = new FXMLLoader(WordleApplication.class.getResource("wordle-view.fxml"), bundle);
         Scene scene = new Scene(fxmlLoader.load());
         WordleController c = fxmlLoader.getController();
         scene.addEventHandler(KeyEvent.KEY_PRESSED, c::onKeyPressed);

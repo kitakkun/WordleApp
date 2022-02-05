@@ -30,7 +30,7 @@ public class SettingView extends Pane {
 
     public SettingView(Settings settings) {
         this.settings = settings;
-        ResourceBundle bundle = ResourceBundle.getBundle("/bundles/UIResources");
+        ResourceBundle bundle = ResourceBundle.getBundle("bundles/UIResources");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("setting-view.fxml"), bundle);
         fxmlLoader.setControllerFactory(param -> this);
         try {

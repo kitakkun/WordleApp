@@ -3,7 +3,6 @@ package kitakkun.wordle.view;
 import javafx.animation.*;
 import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -14,8 +13,6 @@ import kitakkun.wordle.system.Dictionary;
 import kitakkun.wordle.system.Judge;
 import kitakkun.wordle.system.Wordle;
 import kitakkun.wordle.system.WordleState;
-
-import java.util.Objects;
 
 public class WordInputView extends GridPane {
 
