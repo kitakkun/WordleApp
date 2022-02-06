@@ -100,18 +100,22 @@ public class WordInputView extends GridPane {
 
     public void expandAnim(int y, int x) {
         Pane pane = cells[y][x];
-        ScaleTransition toBig = new ScaleTransition(new Duration(100), pane);
-        ScaleTransition toSmall = new ScaleTransition(new Duration(100), pane);
-        toBig.setFromX(1);
-        toBig.setFromY(1);
-        toBig.setToX(1.1);
-        toBig.setToY(1.1);
-        toSmall.setToX(1);
-        toSmall.setToY(1);
-        toSmall.setFromX(1.1);
-        toSmall.setFromY(1.1);
-        toBig.play();
-        toSmall.play();
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(pane.scaleXProperty(), 1),
+                        new KeyValue(pane.scaleYProperty(), 1)
+                ),
+                new KeyFrame(new Duration(100),
+                        new KeyValue(pane.scaleXProperty(), 1.1),
+                        new KeyValue(pane.scaleYProperty(), 1.1)
+                ),
+                new KeyFrame(new Duration(200),
+                        new KeyValue(pane.scaleXProperty(), 1),
+                        new KeyValue(pane.scaleYProperty(), 1)
+                )
+        );
+        timeline.play();
     }
 
     /**
@@ -156,22 +160,18 @@ public class WordInputView extends GridPane {
     }
 
     public void notOnDictionaryAnim(int y) {
+        final int d = 5;
+        Timeline timeline = new Timeline();
         for (Pane cell : cells[y]) {
-            TranslateTransition toRight = new TranslateTransition(new Duration(50), cell);
-            TranslateTransition toLeft = new TranslateTransition(new Duration(50), cell);
-            TranslateTransition toCenter = new TranslateTransition(new Duration(50), cell);
-            toCenter.setFromX(-2);
-            toCenter.setToX(0);
-            toLeft.setFromX(0);
-            toLeft.setToX(-2);
-            toRight.setFromX(0);
-            toRight.setToX(2);
-            toRight.play();
-            toLeft.play();
-            toRight.play();
-            toLeft.play();
-            toCenter.play();
+            timeline.getKeyFrames().addAll(
+                    new KeyFrame(Duration.ZERO, new KeyValue(cell.translateXProperty(), 0)),
+                    new KeyFrame(new Duration(100), new KeyValue(cell.translateXProperty(), d)),
+                    new KeyFrame(new Duration(200), new KeyValue(cell.translateXProperty(), -d)),
+                    new KeyFrame(new Duration(300), new KeyValue(cell.translateXProperty(), 0))
+
+            );
         }
+        timeline.play();
     }
 
     /**
