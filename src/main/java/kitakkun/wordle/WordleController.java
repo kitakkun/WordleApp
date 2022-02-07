@@ -109,7 +109,7 @@ public class WordleController {
         }
         wordle = new Wordle(settings.getAnswerDictionary().getRandomWord(settings.getWordLength()));
         dsView.setDictionary(settings.getDictionary());
-        wiView.ready(wordle, settings.getAttemptLimit());
+        wiView.ready(wordle, settings.getAttemptLimit(), settings.getDictionary());
         wordView.ready(settings.getWordLength());
         messageBox.setText(String.format("Imagine %d letters word.", settings.getWordLength()));
         kbView.releaseAllKeys();

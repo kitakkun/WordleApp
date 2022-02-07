@@ -70,10 +70,11 @@ public class WordInputView extends GridPane {
         this.dictionary = dictionary;
     }
 
-    public void ready(Wordle wordle, int attemptLimit) {
+    public void ready(Wordle wordle, int attemptLimit, Dictionary dictionary) {
         this.wordle = wordle;
         this.wordLength = wordle.getWordLength();
         this.attemptLimit = attemptLimit;
+        this.dictionary = dictionary;
         cursorX = 0;
         cursorY = 0;
         isFinished = false;

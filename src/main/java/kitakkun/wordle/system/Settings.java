@@ -1,5 +1,8 @@
 package kitakkun.wordle.system;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Settings {
     private int wordLength; // 単語長
     private int attemptLimit; // 試行回数制限
@@ -8,11 +11,15 @@ public class Settings {
     private boolean permitShorterWords; // 短い単語入力を許可するか
     private boolean isDarkTheme;    // ダークテーマを用いるかどうか
 
+    private HashMap<String, Dictionary> dictionaries;
+
     public Settings() {
         wordLength = 5;
         attemptLimit = 6;
-        dictionary = new Dictionary();
-        answerDictionary = new Dictionary();
+        dictionaries = new HashMap<>();
+        dictionaries.put("default", new Dictionary());
+        dictionary = dictionaries.get("default");
+        answerDictionary = dictionaries.get("default");
         permitShorterWords = false;
         isDarkTheme = false;
     }
@@ -65,4 +72,15 @@ public class Settings {
         isDarkTheme = darkTheme;
     }
 
+    public void addDictionary(String key, Dictionary dictionary) {
+        dictionaries.put(key, dictionary);
+    }
+
+    public Dictionary getDictionaryByKey(String key) {
+        return dictionaries.getOrDefault(key, null);
+    }
+
+    public String[] getDictionaryKeys() {
+        return dictionaries.keySet().toArray(new String[0]);
+    }
 }

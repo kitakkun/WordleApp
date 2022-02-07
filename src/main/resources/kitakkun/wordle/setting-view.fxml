@@ -4,7 +4,6 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.geometry.Insets?>
-<?import kitakkun.wordle.view.DictionarySelector?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="kitakkun.wordle.SettingView"
@@ -14,39 +13,56 @@
         <Insets topRightBottomLeft="30"/>
     </padding>
     <HBox alignment="CENTER">
-        <Label text="%settings"/>
+        <Label text="%settings" styleClass="heading"/>
     </HBox>
-    <HBox>
-        <Label text="%theme"/>
-        <Pane HBox.hgrow="ALWAYS"/>
-        <RadioButton text="%light" fx:id="lightRadioBtn"/>
-        <RadioButton text="%dark" fx:id="darkRadioBtn"/>
-    </HBox>
-    <HBox alignment="CENTER">
-        <Label text="%attemptLimit" />
-        <Pane HBox.hgrow="ALWAYS"/>
-        <Spinner min="1" max="10" fx:id="attemptLimitSpinner"/>
-        <Label text="%times" prefWidth="70" alignment="CENTER_RIGHT"/>
-    </HBox>
-    <HBox alignment="CENTER">
-        <Label text="%wordLength"/>
-        <Pane HBox.hgrow="ALWAYS"/>
-        <Spinner min="3" max="10" fx:id="wordLengthSpinner"/>
-        <Label text="%letters" prefWidth="70" alignment="CENTER_RIGHT" />
-    </HBox>
-    <HBox alignment="CENTER">
-        <Label text="%dictionary"/>
-        <Pane HBox.hgrow="ALWAYS"/>
-        <DictionarySelector promptText="Select a dictionary to use" fx:id="dictComboBox"/>
-    </HBox>
-    <HBox alignment="CENTER">
-        <Label text="%answerDictionary"/>
-        <Pane HBox.hgrow="ALWAYS"/>
-        <DictionarySelector promptText="Select a dictionary to use" fx:id="ansDictComboBox"/>
-    </HBox>
-    <HBox alignment="CENTER_LEFT">
-        <CheckBox text="%permitWordShortage" fx:id="permitShorterWord" />
-    </HBox>
+    <TabPane tabClosingPolicy="UNAVAILABLE" tabDragPolicy="FIXED">
+        <Tab text="Appearance">
+            <VBox styleClass="setting-box">
+                <HBox>
+                    <Label text="%theme"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <RadioButton text="%light" fx:id="lightRadioBtn"/>
+                    <RadioButton text="%dark" fx:id="darkRadioBtn"/>
+                </HBox>
+            </VBox>
+        </Tab>
+        <Tab text="Game Settings">
+            <VBox styleClass="setting-box">
+                <HBox alignment="CENTER">
+                    <Label text="%attemptLimit" />
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Spinner min="1" max="10" fx:id="attemptLimitSpinner"/>
+                    <Label text="%times" prefWidth="70" alignment="CENTER_RIGHT"/>
+                </HBox>
+                <HBox alignment="CENTER">
+                    <Label text="%wordLength"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Spinner min="3" max="10" fx:id="wordLengthSpinner"/>
+                    <Label text="%letters" prefWidth="70" alignment="CENTER_RIGHT" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT">
+                    <CheckBox text="%permitWordShortage" fx:id="permitShorterWord" />
+                </HBox>
+            </VBox>
+        </Tab>
+        <Tab text="Dictionaries">
+            <VBox styleClass="setting-box">
+                <HBox alignment="CENTER">
+                    <Label text="%dictionary"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <ComboBox promptText="Select a dictionary to use" fx:id="dictComboBox"/>
+                </HBox>
+                <HBox alignment="CENTER">
+                    <Label text="%answerDictionary"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <ComboBox promptText="Select a dictionary to use" fx:id="ansDictComboBox"/>
+                </HBox>
+                <Label text="AvailableDictionaries"/>
+                <ListView fx:id="dictList"/>
+                <Button text="load dictionary" onAction="#addDictionary"/>
+            </VBox>
+        </Tab>
+    </TabPane>
     <HBox alignment="CENTER_RIGHT" spacing="10">
         <Button text="%cancel" onAction="#onCancelBtnClicked"/>
         <Button text="%ok" onAction="#onOKBtnClicked"/>

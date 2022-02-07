@@ -1,3 +1,15 @@
+.heading{
+    -fx-font-size: 25;
+}
+
+.setting-box {
+    -fx-padding: 20;
+}
+
+.tab-header-background {
+    -fx-background-color: none;
+}
+
 .letter-cell {
     -fx-border-color: black;
         -fx-border-style: solid;

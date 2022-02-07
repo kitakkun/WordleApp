@@ -6,18 +6,23 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import kitakkun.wordle.system.Dictionary;
 import kitakkun.wordle.system.Settings;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
 public class SettingView extends Pane {
 
     @FXML
-    private ComboBox dictComboBox;
+    private ListView<String> dictList;
     @FXML
-    private ComboBox ansDictComboBox;
+    private ComboBox<String> dictComboBox;
+    @FXML
+    private ComboBox<String> ansDictComboBox;
     @FXML
     private Spinner<Integer> attemptLimitSpinner, wordLengthSpinner;
     @FXML
@@ -64,6 +69,10 @@ public class SettingView extends Pane {
         } else {
             themeToggle.selectToggle(lightRadioBtn);
         }
+
+        dictList.getItems().addAll(settings.getDictionaryKeys());
+        dictComboBox.getItems().addAll(settings.getDictionaryKeys());
+        ansDictComboBox.getItems().addAll(settings.getDictionaryKeys());
     }
 
     public int getWordLength() {
@@ -91,6 +100,24 @@ public class SettingView extends Pane {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    protected void addDictionary(ActionEvent event) {
+        File file = selectFile();
+        if (file == null) return;
+        Dictionary dictionary = new Dictionary(file);
+        dictList.getItems().add(file.getName());
+        settings.addDictionary(file.getName(), dictionary);
+        dictComboBox.getItems().add(file.getName());
+        ansDictComboBox.getItems().add(file.getName());
+    }
+
+    private File selectFile() {
+        Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text file", "*.txt"));
+        return fileChooser.showOpenDialog(stage);
     }
 
     private void applySettings() {

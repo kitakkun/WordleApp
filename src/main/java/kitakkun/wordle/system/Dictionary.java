@@ -23,7 +23,6 @@ public class Dictionary {
      */
     public Dictionary() {
         ArrayList<String> words = new ArrayList<>();
-
         try {
             InputStream is = getClass().getResourceAsStream("/words/words_alpha.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -34,7 +33,6 @@ public class Dictionary {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        ArrayList<String> words = loadWords(Objects.requireNonNull(getClass().getResource("/words/words_alpha.txt")));
         this.words = words.toArray(new String[0]);
         System.out.printf("%d words was loaded.\n", this.words.length);
     }
@@ -50,17 +48,33 @@ public class Dictionary {
         System.out.printf("%d words was loaded.\n", this.words.length);
     }
 
+    public Dictionary(File file) {
+        ArrayList<String> words = loadWords(file);
+        this.words = words.toArray(new String[0]);
+        System.out.printf("%d words was loaded.\n", this.words.length);
+    }
+
     private ArrayList<String> loadWords(URL url) {
         ArrayList<String> words = new ArrayList<>();
         try {
             File file = Paths.get(url.toURI()).toFile();
+            words = loadWords(file);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return words;
+    }
+
+    private ArrayList<String> loadWords(File file) {
+        ArrayList<String> words = new ArrayList<>();
+        try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
             for (String line : br.lines().toList()) {
                 words.addAll(Arrays.stream(line.split(",")).toList());
             }
             br.close();
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return words;
