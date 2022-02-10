@@ -24,6 +24,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kitakkun.wordle.system.*;
+import kitakkun.wordle.system.settings.Settings;
+import kitakkun.wordle.system.settings.SettingsReader;
 import kitakkun.wordle.view.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -51,12 +53,10 @@ public class WordleController {
     @FXML
     private CheckMenuItem showDict, showKB;
 
-    private Settings settings;
     private Wordle wordle;
 
     public void initialize() {
         parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/base.css")).toExternalForm());
-        settings = new Settings();
         readyWordle();
     }
 
@@ -102,6 +102,7 @@ public class WordleController {
 
     @FXML
     protected void readyWordle() {
+        Settings settings = SettingsReader.read();
         if (settings.isDarkTheme()) {
             parent.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/dark.css")).toExternalForm());
         } else {
@@ -121,7 +122,7 @@ public class WordleController {
 
     @FXML
     protected void openSettings() {
-        SettingWindow window = new SettingWindow(settings);
+        SettingWindow window = new SettingWindow();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setOnHiding(windowEvent -> readyWordle());
         window.show();

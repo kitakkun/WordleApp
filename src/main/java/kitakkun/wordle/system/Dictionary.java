@@ -27,7 +27,7 @@ public class Dictionary {
             InputStream is = getClass().getResourceAsStream("/words/words_alpha.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             for (String line : br.lines().toList()) {
-                words.addAll(Arrays.stream(line.split(",")).toList());
+                words.addAll(Arrays.stream(line.replace(" ", "").split(",")).toList());
             }
             br.close();
         } catch (IOException e) {
@@ -71,7 +71,7 @@ public class Dictionary {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
             for (String line : br.lines().toList()) {
-                words.addAll(Arrays.stream(line.split(",")).toList());
+                words.addAll(Arrays.stream(line.replace(" ", "").split(",")).toList());
             }
             br.close();
         } catch (IOException e) {
@@ -86,9 +86,8 @@ public class Dictionary {
      * @return 存在するかどうか
      */
     public boolean isExist(String word) {
-        word = word.toLowerCase();
         for (String w : words) {
-            if (w.equals(word)) {
+            if (w.equalsIgnoreCase(word)) {
                 return true;
             }
         }
@@ -113,6 +112,10 @@ public class Dictionary {
         String[] words = Arrays.stream(this.words).toList().stream().filter(word -> word.length() == length).toList().toArray(new String[0]);
         int index = (int)(Math.random() * words.length);
         return words[index];
+    }
+
+    public int getWordCount() {
+        return words.length;
     }
 
     public String[] search(String regex) {

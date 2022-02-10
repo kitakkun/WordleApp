@@ -8,8 +8,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import kitakkun.wordle.system.Dictionary;
-import kitakkun.wordle.system.Settings;
+import kitakkun.wordle.system.settings.Settings;
+import kitakkun.wordle.system.settings.SettingsReader;
+import kitakkun.wordle.system.settings.SettingsWriter;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,12 +30,11 @@ public class SettingView extends Pane {
     private CheckBox permitShorterWord;
     @FXML
     private RadioButton lightRadioBtn, darkRadioBtn;
-    private ToggleGroup themeToggle;
 
     private final Settings settings;
 
-    public SettingView(Settings settings) {
-        this.settings = settings;
+    public SettingView() {
+        this.settings = SettingsReader.read();
         ResourceBundle bundle = ResourceBundle.getBundle("bundles/UIResources");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("setting-view.fxml"), bundle);
         fxmlLoader.setControllerFactory(param -> this);
@@ -50,7 +50,9 @@ public class SettingView extends Pane {
         wordLengthSpinner.getValueFactory().setValue(settings.getWordLength());
         attemptLimitSpinner.getValueFactory().setValue(settings.getAttemptLimit());
 
-        themeToggle = new ToggleGroup();
+        permitShorterWord.setSelected(settings.permitShorterWords());
+
+        ToggleGroup themeToggle = new ToggleGroup();
         themeToggle.getToggles().add(lightRadioBtn);
         themeToggle.getToggles().add(darkRadioBtn);
         darkRadioBtn.setOnAction(event -> {
@@ -71,20 +73,15 @@ public class SettingView extends Pane {
         }
 
         dictList.getItems().addAll(settings.getDictionaryKeys());
+        dictList.getItems().forEach(item -> {
+            int i = dictList.getItems().indexOf(item);
+            String newStr = String.format("%s(%d words)", item, settings.getDictionaryByKey(item).getWordCount());
+            dictList.getItems().set(i, newStr);
+        });
         dictComboBox.getItems().addAll(settings.getDictionaryKeys());
         ansDictComboBox.getItems().addAll(settings.getDictionaryKeys());
-    }
-
-    public int getWordLength() {
-        return wordLengthSpinner.getValue();
-    }
-
-    public int getAttemptLimit() {
-        return attemptLimitSpinner.getValue();
-    }
-
-    public boolean permitShorterWords() {
-        return permitShorterWord.isSelected();
+        dictComboBox.setValue(settings.getKeyByDictionary(settings.getDictionary()));
+        ansDictComboBox.setValue(settings.getKeyByDictionary(settings.getAnswerDictionary()));
     }
 
     @FXML
@@ -103,14 +100,14 @@ public class SettingView extends Pane {
     }
 
     @FXML
-    protected void addDictionary(ActionEvent event) {
+    protected void addDictionary() {
         File file = selectFile();
         if (file == null) return;
-        Dictionary dictionary = new Dictionary(file);
-        dictList.getItems().add(file.getName());
-        settings.addDictionary(file.getName(), dictionary);
-        dictComboBox.getItems().add(file.getName());
-        ansDictComboBox.getItems().add(file.getName());
+        settings.addDictionaryFile(file);
+        dictComboBox.getItems().clear();
+        ansDictComboBox.getItems().clear();
+        dictComboBox.getItems().addAll(settings.getDictionaryKeys());
+        ansDictComboBox.getItems().addAll(settings.getDictionaryKeys());
     }
 
     private File selectFile() {
@@ -125,5 +122,8 @@ public class SettingView extends Pane {
         settings.setAttemptLimit(attemptLimitSpinner.getValue());
         settings.setPermitShorterWords(permitShorterWord.isSelected());
         settings.setDarkTheme(darkRadioBtn.isSelected());
+        settings.setDictionary(settings.getDictionaryByKey(dictComboBox.getValue()));
+        settings.setAnswerDictionary(settings.getDictionaryByKey(ansDictComboBox.getValue()));
+        SettingsWriter.write(settings);
     }
 }

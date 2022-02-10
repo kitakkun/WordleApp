@@ -10,4 +10,6 @@ module kitakkun.wordle {
     opens kitakkun.wordle.view to javafx.fxml;
     exports kitakkun.wordle.system;
     opens kitakkun.wordle.system to javafx.fxml;
+    exports kitakkun.wordle.system.settings;
+    opens kitakkun.wordle.system.settings to javafx.fxml;
 }
